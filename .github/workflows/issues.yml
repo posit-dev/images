@@ -6,6 +6,8 @@ on:
 
 jobs:
   issue:
+    # only run in posit-dev/images.
+    if: github.repository == 'posit-dev/images'
     runs-on: ubuntu-latest
     steps:
 
