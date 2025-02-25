@@ -11,6 +11,7 @@ Posit Container Images
 | [posit-dev/images-package-manager](https://github.com/posit-dev/images-package-manager) | Posit Package Manager Container Images |
 | [posit-dev/images-workbench](https://github.com/posit-dev/images-workbench) | Posit Workbench Container Images |
 | [posit-dev/images-shared](https://github.com/posit-dev/images-shared) | Shared Tooling for Container Images |
+| [posit-dev/pti](https://github.com/posit-dev/pti) | Posit Tool Installer - a utility for installing and configuring product dependencies |
 
 
 ## Registries
