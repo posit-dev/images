@@ -1,14 +1,15 @@
-# Images
+# Posit Container Images
 
-Posit Container Images
+> [!IMPORTANT]
+> These images are under active development and testing and are not yet supported by Posit.
+>
+> Please see [rstudio/rstudio-docker-products](https://github.com/rstudio/rstudio-docker-products) for officially supported images.
 
 | Image | Docker Hub | GitHub Container Registry |
-|:------|:-----------|:--------------------------|
-| `connect` | [`docker.io/posit/connect`](https://hub.docker.com/repository/docker/posit/connect/tags) | [`ghcr.io/posit-dev/connect`](https://github.com/posit-dev/images-connect/pkgs/container/connect) |
-| `connect-content-init` | [`docker.io/posit/connect-content-init`](https://hub.docker.com/repository/docker/posit/connect-content-init/tags) | [`ghcr.io/posit-dev/connect-content-init`](https://github.com/posit-dev/images-connect/pkgs/container/connect-content-init) |
+|-------|------------|---------------------------|
+| `connect` | `docker.io/posit/connect` | `ghcr.io/posit-dev/connect` |
 | `package-manager` | [`docker.io/posit/package-manager`](https://hub.docker.com/repository/docker/posit/package-manager/tags) | [`ghcr.io/posit-dev/package-manager`](https://github.com/posit-dev/images-package-manager/pkgs/container/package-manager) |
-| `workbench` | [`docker.io/posit/workbench`](https://hub.docker.com/repository/docker/posit/workbench/tags) | [`ghcr.io/posit-dev/workbench`](https://github.com/posit-dev/images-workbench/pkgs/container/workbench) |
-| `workbench-session-init` | [`docker.io/posit/workbench-session-init`](https://hub.docker.com/repository/docker/posit/workbench-session-init/tags) | [`ghcr.io/posit-dev/workbench-session-init`](https://github.com/posit-dev/images-workbench/pkgs/container/workbench-session-init) |
+| `workbench` | `docker.io/posit/workbench` | `ghcr.io/posit-dev/workbench` |
 
 ## Registries
 
@@ -20,22 +21,53 @@ Posit Container Images
 ### Image Definitions
 
 | Repository | Description |
-|:-----------|:------------|
-| [posit-dev/images-connect](https://github.com/posit-dev/images-connect) | Posit Connect Container Images |
-| [posit-dev/images-package-manager](https://github.com/posit-dev/images-package-manager) | Posit Package Manager Container Images |
-| [posit-dev/images-workbench](https://github.com/posit-dev/images-workbench) | Posit Workbench Container Images |
+|------------|-------------|
+| `images-connect` | Posit Connect Container Images |
+| [images-package-manager](https://github.com/posit-dev/images-package-manager) | Posit Package Manager Container Images |
+| `images-workbench` | Posit Workbench Container Images |
 
 ### Examples and Tooling
 
 | Repository | Description |
-|:-----------|:------------|
-| [posit-dev/images](https://github.com/posit-dev/images) | Posit Container Image Meta Repository |
-| [posit-dev/images-examples](https://github.com/posit-dev/images-examples) | Examples for using and extending Posit Container Images |
-| [posit-dev/images-shared](https://github.com/posit-dev/images-shared) | Shared Tooling for Container Images |
+|------------|-------------|
+| [images](https://github.com/posit-dev/images) | Posit Container Image Meta Repository |
+| [images-examples](https://github.com/posit-dev/images-examples) | Examples for using and extending Posit Container Images |
+| [images-shared](https://github.com/posit-dev/images-shared) | Shared Tooling for Container Images |
 
-## Issues
+## Design Principles
 
-If you encounter any issues or have any questions, please [open an issue](https://github.com/posit-dev/images/issues). We appreciate your feedback.
+### Static Definitions
+
+Each `Containerfile` (or `Dockerfile`) is static and can be built using multiple backends  (e.g. [docker buildx bake](https://github.com/docker/buildx#installing), [podman](https://podman-desktop.io/docs/installation)).
+
+### Security
+
+Rapidly address security concerns by supporting scanning and routinely rebuilding images for [all supported product versions](https://docs.posit.co/supported-versions/).
+
+### ARM Support
+
+We are adding [multi-platform images](https://docs.docker.com/build/building/multi-platform/) as Posit rolls out support for ARM chipsets.
+
+[Package Manager](https://github.com/posit-dev/images-package-manager) now has [multi-platform images](https://github.com/orgs/posit-dev/packages/container/package/package-manager).
+
+### Extensibity
+
+A single configuration file defines:
+
+| Property         | Examples                                  |
+|------------------|-------------------------------------------|
+| Images           | `connect`, `workbench`, `package-manager` |
+| Versions         | `2024.12.0`, `2025.01.0`                  |
+| Variants         | Minimal (`min`), Standard (`std`)         |
+| Dependencies     | Python, R, Quarto                         |
+| Operating system | Ubuntu 24.04, Ubuntu 22.04                |
+| Platforms        | `linux/amd64`, `linux/arm64`              |
+| Tags             | `latest`, `2024.12.0-ubuntu2204`          |
+| Registries       | Docker Hub, GHCR                          |
+
+## Share your Feedback
+
+We invite you to join us on [GitHub Discussions](https://github.com/posit-dev/images/discussions) to ask questions and share feedback.
 
 ## Code of Conduct
 
