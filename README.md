@@ -8,8 +8,6 @@
 | Tool | Required for | Install |
 |------|-------------|---------|
 | [Docker](https://docs.docker.com/get-docker/) | Running containers locally | [Get Docker](https://docs.docker.com/get-docker/) |
-| [Helm](https://helm.sh/docs/intro/install/) | Deploying on Kubernetes | [Install Helm](https://helm.sh/docs/intro/install/) |
-| [kubectl](https://kubernetes.io/docs/tasks/tools/) | Deploying on Kubernetes | [Install kubectl](https://kubernetes.io/docs/tasks/tools/) |
 | Posit License | All products | [Licensing FAQ](https://docs.posit.co/licensing/licensing-faq.html) |
 
 ## Quick Start
@@ -88,129 +86,11 @@ A valid [Posit license](https://docs.posit.co/licensing/licensing-faq.html) is r
 
 ## Deploying on Kubernetes
 
-These images work with the [Posit Helm charts](https://docs.posit.co/helm/) for Kubernetes deployments. Add the Helm repository, then configure chart values to use the new images.
+These images work with the [Posit Helm charts](https://docs.posit.co/helm/) for Kubernetes deployments. See each product repository for Helm values and deployment instructions:
 
-```bash
-helm repo add rstudio https://helm.rstudio.com
-helm repo update
-```
-
-> [!TIP]
-> Leaving `tag` empty uses the default version bundled with the chart. Explicitly set `tag` if you need a specific version.
-
-Each product requires a license. Create a Kubernetes secret from your license file, then reference it in your values:
-
-```bash
-kubectl create secret generic <product>-license \
-  --from-file=license.lic=/path/to/license.lic
-```
-
-### Posit Connect
-
-Configure the `rstudio/rstudio-connect` chart:
-
-```yaml
-image:
-  repository: ghcr.io/posit-dev/connect
-  os: "ubuntu-24.04"
-  tag: ""
-
-license:
-  file:
-    secret: posit-connect-license
-
-launcher:
-  defaultInitContainer:
-    repository: ghcr.io/posit-dev/connect-content-init
-    os: "ubuntu-24.04"
-    tag: ""
-```
-
-The chart defaults to `customRuntimeYaml: "base"`, which includes content images for the full R and Python version matrix. To use specific content images instead, provide a `customRuntimeYaml` map:
-
-```yaml
-launcher:
-  customRuntimeYaml:
-    name: Kubernetes
-    images:
-      - name: ghcr.io/posit-dev/connect-content:R4.5.2-python3.14.3-ubuntu-24.04
-        r:
-          installations:
-            - path: /opt/R/4.5.2/bin/R
-              version: 4.5.2
-        python:
-          installations:
-            - path: /opt/python/3.14.3/bin/python3
-              version: 3.14.3
-        quarto:
-          installations:
-            - path: /opt/quarto/1.8.27/bin/quarto
-              version: 1.8.27
-      - name: ghcr.io/posit-dev/connect-content:R4.4.3-python3.12.12-ubuntu-24.04
-        r:
-          installations:
-            - path: /opt/R/4.4.3/bin/R
-              version: 4.4.3
-        python:
-          installations:
-            - path: /opt/python/3.12.12/bin/python3
-              version: 3.12.12
-        quarto:
-          installations:
-            - path: /opt/quarto/1.8.27/bin/quarto
-              version: 1.8.27
-```
-
-> [!NOTE]
-> Append `-pro` to content image tags for images with Posit Professional Drivers.
-
-### Posit Package Manager
-
-Configure the `rstudio/rstudio-pm` chart:
-
-```yaml
-image:
-  repository: ghcr.io/posit-dev/package-manager
-  os: "ubuntu-24.04"
-  tag: ""
-
-license:
-  file:
-    secret: posit-package-manager-license
-```
-
-### Posit Workbench
-
-Configure the `rstudio/rstudio-workbench` chart:
-
-```yaml
-image:
-  repository: ghcr.io/posit-dev/workbench
-  os: "ubuntu-24.04"
-  tag: ""
-
-license:
-  file:
-    secret: posit-workbench-license
-
-session:
-  image:
-    repository: ghcr.io/posit-dev/workbench-session
-    os: "ubuntu-24.04"
-    rVersion: "4.5.2"
-    pythonVersion: "3.14.3"
-    tag: ""
-  initContainerRepository: ghcr.io/posit-dev/workbench-session-init
-```
-
-> [!NOTE]
-> Session image tags follow the pattern `R{r_version}-python{python_version}-{os}`. To use a second session image with different R/Python versions, add an additional session profile in your Workbench configuration.
-
-### Helm Chart Documentation
-
-- [Connect chart](https://docs.posit.co/helm/charts/rstudio-connect/README.html)
-- [Package Manager chart](https://docs.posit.co/helm/charts/rstudio-pm/README.html)
-- [Workbench chart](https://docs.posit.co/helm/charts/rstudio-workbench/README.html)
+- [Connect Helm deployment](https://github.com/posit-dev/images-connect#deploying-on-kubernetes)
+- [Package Manager Helm deployment](https://github.com/posit-dev/images-package-manager#deploying-on-kubernetes)
+- [Workbench Helm deployment](https://github.com/posit-dev/images-workbench#deploying-on-kubernetes)
 
 ## Image Variants
 
