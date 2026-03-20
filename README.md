@@ -21,7 +21,7 @@ docker run -d \
   --privileged \
   -p 3939:3939 \
   -v /path/to/license.lic:/etc/rstudio-connect/license.lic \
-  ghcr.io/posit-dev/connect:${PCT_VERSION}-ubuntu-24.04
+  ghcr.io/posit-dev/connect:${PCT_VERSION}
   # Can also use docker.io/posit/connect
 ```
 
@@ -35,7 +35,7 @@ docker run -d \
   --name package-manager \
   -p 4242:4242 \
   -v /path/to/license.lic:/etc/rstudio-pm/license.lic \
-  ghcr.io/posit-dev/package-manager:${PPM_VERSION}-ubuntu-24.04
+  ghcr.io/posit-dev/package-manager:${PPM_VERSION}
   # Can also use docker.io/posit/package-manager
 ```
 
@@ -51,7 +51,7 @@ docker run -d \
   -e PWB_TESTUSER=posit \
   -e PWB_TESTUSER_PASSWD=posit \
   -v /path/to/license.lic:/etc/rstudio-server/license.lic \
-  ghcr.io/posit-dev/workbench:${PWB_VERSION}-ubuntu-24.04
+  ghcr.io/posit-dev/workbench:${PWB_VERSION}
   # Can also use docker.io/posit/workbench
 ```
 
@@ -103,10 +103,11 @@ For examples of extending Minimal base images, see https://github.com/posit-dev/
 
 ## Image Tag Format
 
-- **Product images**: `{version}-{os}-{variant}` (e.g., `2025.12.1-ubuntu-24.04-std`)
+- `{version}` — Latest OS, standard variant (e.g., `2025.12.1`)
+- `{version}-{os}` — Explicit OS, standard variant (e.g., `2025.12.1-ubuntu-24.04`)
+- `{version}-{os}-{variant}` — Explicit OS and variant (e.g., `2025.12.1-ubuntu-24.04-std`)
+- `latest` — Latest version, default OS, standard variant
 - **Content/session images**: `R{r_version}-python{python_version}-{os}` (e.g., `R4.5.2-python3.14.3-ubuntu-24.04`)
-- **Short tags**: `{version}` defaults to standard variant
-- **`latest` tag**: most recent version, default OS, standard variant
 
 ## Registries
 
