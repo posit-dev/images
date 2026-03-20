@@ -99,38 +99,39 @@ launcher:
     tag: ""
 ```
 
-The chart includes a default set of content runtime images via `customRuntimeYaml`. Set `customRuntimeYaml: {}` and use `additionalRuntimeImages` to limit to specific images:
+The chart defaults to `customRuntimeYaml: "base"`, which includes content images for the full R and Python version matrix. To use specific content images instead, provide a `customRuntimeYaml` map:
 
 ```yaml
 launcher:
-  customRuntimeYaml: {}
-  additionalRuntimeImages:
-    - name: ghcr.io/posit-dev/connect-content:R4.5.2-python3.14.3-ubuntu-24.04
-      r:
-        installations:
-          - path: /opt/R/4.5.2/bin/R
-            version: 4.5.2
-      python:
-        installations:
-          - path: /opt/python/3.14.3/bin/python3
-            version: 3.14.3
-      quarto:
-        installations:
-          - path: /opt/quarto/1.8.27/bin/quarto
-            version: 1.8.27
-    - name: ghcr.io/posit-dev/connect-content:R4.4.3-python3.12.12-ubuntu-24.04
-      r:
-        installations:
-          - path: /opt/R/4.4.3/bin/R
-            version: 4.4.3
-      python:
-        installations:
-          - path: /opt/python/3.12.12/bin/python3
-            version: 3.12.12
-      quarto:
-        installations:
-          - path: /opt/quarto/1.8.27/bin/quarto
-            version: 1.8.27
+  customRuntimeYaml:
+    name: Kubernetes
+    images:
+      - name: ghcr.io/posit-dev/connect-content:R4.5.2-python3.14.3-ubuntu-24.04
+        r:
+          installations:
+            - path: /opt/R/4.5.2/bin/R
+              version: 4.5.2
+        python:
+          installations:
+            - path: /opt/python/3.14.3/bin/python3
+              version: 3.14.3
+        quarto:
+          installations:
+            - path: /opt/quarto/1.8.27/bin/quarto
+              version: 1.8.27
+      - name: ghcr.io/posit-dev/connect-content:R4.4.3-python3.12.12-ubuntu-24.04
+        r:
+          installations:
+            - path: /opt/R/4.4.3/bin/R
+              version: 4.4.3
+        python:
+          installations:
+            - path: /opt/python/3.12.12/bin/python3
+              version: 3.12.12
+        quarto:
+          installations:
+            - path: /opt/quarto/1.8.27/bin/quarto
+              version: 1.8.27
 ```
 
 > [!NOTE]
