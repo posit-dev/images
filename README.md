@@ -15,7 +15,7 @@
 ### Posit Connect
 
 ```bash
-PCT_VERSION="2025.12.1"
+PCT_VERSION="2026.02.0"
 docker run -d \
   --name connect \
   --privileged \
@@ -44,7 +44,7 @@ Access Package Manager at `http://localhost:4242`.
 ### Posit Workbench
 
 ```bash
-PWB_VERSION="2025.09.2-418.pro4"
+PWB_VERSION="2026.01.1-403.pro11"
 docker run -d \
   --name workbench \
   -p 8787:8787 \
@@ -103,9 +103,9 @@ For examples of extending Minimal base images, see https://github.com/posit-dev/
 
 ## Image Tag Format
 
-- `{version}` — Latest OS, standard variant (e.g., `2025.12.1`)
-- `{version}-{os}` — Explicit OS, standard variant (e.g., `2025.12.1-ubuntu-24.04`)
-- `{version}-{os}-{variant}` — Explicit OS and variant (e.g., `2025.12.1-ubuntu-24.04-std`)
+- `{version}` — Latest OS, standard variant (e.g., `2026.02.0`)
+- `{version}-{os}` — Explicit OS, standard variant (e.g., `2026.02.0-ubuntu-24.04`)
+- `{version}-{os}-{variant}` — Explicit OS and variant (e.g., `2026.02.0-ubuntu-24.04-std`)
 - `latest` — Latest version, default OS, standard variant
 - **Content/session images**: `R{r_version}-python{python_version}-{os}` (e.g., `R4.5.2-python3.14.3-ubuntu-24.04`)
 
