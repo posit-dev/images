@@ -65,24 +65,24 @@ A valid [Posit license](https://docs.posit.co/licensing/licensing-faq.html) is r
 
 | Image | Docker Hub | GitHub Container Registry |
 |-------|------------|---------------------------|
-| `connect` | `docker.io/posit/connect` | `ghcr.io/posit-dev/connect` |
-| `connect-content` | `docker.io/posit/connect-content` | `ghcr.io/posit-dev/connect-content` |
-| `connect-content-init` | `docker.io/posit/connect-content-init` | `ghcr.io/posit-dev/connect-content-init` |
+| `connect` | [`docker.io/posit/connect`](https://hub.docker.com/r/posit/connect) | [`ghcr.io/posit-dev/connect`](https://github.com/posit-dev/images-connect/pkgs/container/connect) |
+| `connect-content` | [`docker.io/posit/connect-content`](https://hub.docker.com/r/posit/connect-content) | [`ghcr.io/posit-dev/connect-content`](https://github.com/posit-dev/images-connect/pkgs/container/connect-content) |
+| `connect-content-init` | [`docker.io/posit/connect-content-init`](https://hub.docker.com/r/posit/connect-content-init) | [`ghcr.io/posit-dev/connect-content-init`](https://github.com/posit-dev/images-connect/pkgs/container/connect-content-init) |
 
 ### Posit Package Manager
 
 | Image | Docker Hub | GitHub Container Registry |
 |-------|------------|---------------------------|
-| `package-manager` | [`docker.io/posit/package-manager`](https://hub.docker.com/repository/docker/posit/package-manager/tags) | [`ghcr.io/posit-dev/package-manager`](https://github.com/posit-dev/images-package-manager/pkgs/container/package-manager) |
+| `package-manager` | [`docker.io/posit/package-manager`](https://hub.docker.com/r/posit/package-manager) | [`ghcr.io/posit-dev/package-manager`](https://github.com/posit-dev/images-package-manager/pkgs/container/package-manager) |
 
 ### Posit Workbench
 
 | Image | Docker Hub | GitHub Container Registry |
 |-------|------------|---------------------------|
-| `workbench` | `docker.io/posit/workbench` | `ghcr.io/posit-dev/workbench` |
-| `workbench-session` | `docker.io/posit/workbench-session` | `ghcr.io/posit-dev/workbench-session` |
-| `workbench-session-init` | `docker.io/posit/workbench-session-init` | `ghcr.io/posit-dev/workbench-session-init` |
-| `workbench-positron-init` | `docker.io/posit/workbench-positron-init` | `ghcr.io/posit-dev/workbench-positron-init` |
+| `workbench` | [`docker.io/posit/workbench`](https://hub.docker.com/r/posit/workbench) | [`ghcr.io/posit-dev/workbench`](https://github.com/posit-dev/images-workbench/pkgs/container/workbench) |
+| `workbench-session` | [`docker.io/posit/workbench-session`](https://hub.docker.com/r/posit/workbench-session) | [`ghcr.io/posit-dev/workbench-session`](https://github.com/posit-dev/images-workbench/pkgs/container/workbench-session) |
+| `workbench-session-init` | [`docker.io/posit/workbench-session-init`](https://hub.docker.com/r/posit/workbench-session-init) | [`ghcr.io/posit-dev/workbench-session-init`](https://github.com/posit-dev/images-workbench/pkgs/container/workbench-session-init) |
+| `workbench-positron-init` | [`docker.io/posit/workbench-positron-init`](https://hub.docker.com/r/posit/workbench-positron-init) | [`ghcr.io/posit-dev/workbench-positron-init`](https://github.com/posit-dev/images-workbench/pkgs/container/workbench-positron-init) |
 
 ## Deploying on Kubernetes
 
@@ -99,7 +99,7 @@ These images work with the [Posit Helm charts](https://docs.posit.co/helm/) for 
 | Standard | `-std` | Includes R, Python, and Quarto. Runs out of the box. |
 | Minimal | `-min` | Base image for custom builds. Will not run as-is. |
 
-For examples of extending Minimal base images, see https://github.com/posit-dev/images-examples/tree/main/extending
+For examples of extending Minimal base images, see the [extending examples](https://github.com/posit-dev/images-examples/tree/main/extending).
 
 ## Image Tag Format
 
