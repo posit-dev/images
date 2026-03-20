@@ -41,12 +41,14 @@ PWB_VERSION="2025.09.2-418.pro4"
 docker run -d \
   --name workbench \
   -p 8787:8787 \
+  -e PWB_TESTUSER=posit \
+  -e PWB_TESTUSER_PASSWD=posit \
   -v /path/to/license.lic:/etc/rstudio-server/license.lic \
   ghcr.io/posit-dev/workbench:${PWB_VERSION}-ubuntu-24.04
   # Can also use docker.io/posit/workbench
 ```
 
-Access Workbench at `http://localhost:8787`.
+Access Workbench at `http://localhost:8787`. Log in with username `posit` and password `posit`.
 
 For detailed configuration, environment variables, and volume mounts, see each product's documentation linked below.
 
