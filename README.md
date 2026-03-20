@@ -50,7 +50,7 @@ docker run -d \
 
 Access Workbench at `http://localhost:8787`. Log in with username `posit` and password `posit`.
 
-For detailed configuration, environment variables, and volume mounts, see each product's documentation linked below.
+A valid [Posit license](https://docs.posit.co/licensing/licensing-faq.html) is required for each product. Posit recommends license file activation. For detailed configuration, environment variables, and volume mounts, see each product's documentation linked below.
 
 ## Images
 
@@ -89,6 +89,13 @@ helm repo update
 > [!TIP]
 > Leaving `tag` empty uses the default version bundled with the chart. Explicitly set `tag` if you need a specific version.
 
+Each product requires a license. Create a Kubernetes secret from your license file, then reference it in your values:
+
+```bash
+kubectl create secret generic <product>-license \
+  --from-file=license.lic=/path/to/license.lic
+```
+
 ### Posit Connect
 
 Configure the `rstudio/rstudio-connect` chart:
@@ -98,6 +105,10 @@ image:
   repository: ghcr.io/posit-dev/connect
   os: "ubuntu-24.04"
   tag: ""
+
+license:
+  file:
+    secret: posit-connect-license
 
 launcher:
   defaultInitContainer:
@@ -153,6 +164,10 @@ image:
   repository: ghcr.io/posit-dev/package-manager
   os: "ubuntu-24.04"
   tag: ""
+
+license:
+  file:
+    secret: posit-package-manager-license
 ```
 
 ### Posit Workbench
@@ -164,6 +179,10 @@ image:
   repository: ghcr.io/posit-dev/workbench
   os: "ubuntu-24.04"
   tag: ""
+
+license:
+  file:
+    secret: posit-workbench-license
 
 session:
   image:
