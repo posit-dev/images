@@ -3,6 +3,15 @@
 > [!NOTE]
 > These images are in preview as Posit migrates container images from [rstudio/rstudio-docker-products](https://github.com/rstudio/rstudio-docker-products). The existing images remain supported.
 
+## Prerequisites
+
+| Tool | Required for | Install |
+|------|-------------|---------|
+| [Docker](https://docs.docker.com/get-docker/) | Running containers locally | [Get Docker](https://docs.docker.com/get-docker/) |
+| [Helm](https://helm.sh/docs/intro/install/) | Deploying on Kubernetes | [Install Helm](https://helm.sh/docs/intro/install/) |
+| [kubectl](https://kubernetes.io/docs/tasks/tools/) | Deploying on Kubernetes | [Install kubectl](https://kubernetes.io/docs/tasks/tools/) |
+| Posit License | All products | [Licensing FAQ](https://docs.posit.co/licensing/licensing-faq.html) |
+
 ## Quick Start
 
 ### Posit Connect
