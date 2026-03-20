@@ -157,7 +157,7 @@ We are adding [multi-platform images](https://docs.docker.com/build/building/mul
 
 [Package Manager](https://github.com/posit-dev/images-package-manager) now has [multi-platform images](https://github.com/orgs/posit-dev/packages/container/package/package-manager).
 
-### Extensibity
+### Extensibility
 
 A single [configuration file][bakery-configuration] (`bakery.yaml`) defines:
 
