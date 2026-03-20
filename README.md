@@ -16,13 +16,13 @@
 
 ```bash
 PCT_VERSION="2026.02.0"
+PCT_IMAGE="ghcr.io/posit-dev/connect"  # or docker.io/posit/connect
 docker run -d \
   --name connect \
   --privileged \
   -p 3939:3939 \
   -v /path/to/license.lic:/etc/rstudio-connect/license.lic \
-  ghcr.io/posit-dev/connect:${PCT_VERSION}
-  # Can also use docker.io/posit/connect
+  ${PCT_IMAGE}:${PCT_VERSION}
 ```
 
 Access Posit Connect at `http://localhost:3939`.
@@ -31,12 +31,12 @@ Access Posit Connect at `http://localhost:3939`.
 
 ```bash
 PPM_VERSION="2025.12.0"
+PPM_IMAGE="ghcr.io/posit-dev/package-manager"  # or docker.io/posit/package-manager
 docker run -d \
   --name package-manager \
   -p 4242:4242 \
   -v /path/to/license.lic:/etc/rstudio-pm/license.lic \
-  ghcr.io/posit-dev/package-manager:${PPM_VERSION}
-  # Can also use docker.io/posit/package-manager
+  ${PPM_IMAGE}:${PPM_VERSION}
 ```
 
 Access Package Manager at `http://localhost:4242`.
@@ -45,14 +45,14 @@ Access Package Manager at `http://localhost:4242`.
 
 ```bash
 PWB_VERSION="2026.01.1"
+PWB_IMAGE="ghcr.io/posit-dev/workbench"  # or docker.io/posit/workbench
 docker run -d \
   --name workbench \
   -p 8787:8787 \
   -e PWB_TESTUSER=posit \
   -e PWB_TESTUSER_PASSWD=posit \
   -v /path/to/license.lic:/etc/rstudio-server/license.lic \
-  ghcr.io/posit-dev/workbench:${PWB_VERSION}
-  # Can also use docker.io/posit/workbench
+  ${PWB_IMAGE}:${PWB_VERSION}
 ```
 
 Access Workbench at `http://localhost:8787`. Log in with username `posit` and password `posit`.
