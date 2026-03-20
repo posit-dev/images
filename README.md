@@ -79,6 +79,9 @@ helm repo add rstudio https://helm.rstudio.com
 helm repo update
 ```
 
+> [!TIP]
+> Leaving `tag` empty uses the default version bundled with the chart. Explicitly set `tag` if you need a specific version.
+
 ### Posit Connect
 
 Configure the `rstudio/rstudio-connect` chart:
