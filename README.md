@@ -30,7 +30,7 @@ Access Posit Connect at `http://localhost:3939`.
 ### Posit Package Manager
 
 ```bash
-PPM_VERSION="2025.12.0-14"
+PPM_VERSION="2025.12.0"
 docker run -d \
   --name package-manager \
   -p 4242:4242 \
@@ -44,7 +44,7 @@ Access Package Manager at `http://localhost:4242`.
 ### Posit Workbench
 
 ```bash
-PWB_VERSION="2026.01.1-403.pro11"
+PWB_VERSION="2026.01.1"
 docker run -d \
   --name workbench \
   -p 8787:8787 \
@@ -102,6 +102,8 @@ These images work with the [Posit Helm charts](https://docs.posit.co/helm/) for 
 For examples of extending Minimal base images, see https://github.com/posit-dev/images-examples/tree/main/extending
 
 ## Image Tag Format
+
+Ubuntu 24.04 is the default OS for all images.
 
 - `{version}` — Latest OS, standard variant (e.g., `2026.02.0`)
 - `{version}-{os}` — Explicit OS, standard variant (e.g., `2026.02.0-ubuntu-24.04`)
