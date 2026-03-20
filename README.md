@@ -5,11 +5,189 @@
 >
 > Please see [rstudio/rstudio-docker-products](https://github.com/rstudio/rstudio-docker-products) for officially supported images.
 
+## Quick Start
+
+### Posit Connect
+
+```bash
+export PCT_VERSION="2025.12.1"
+docker run -d --privileged \
+  -p 3939:3939 \
+  -v /path/to/license.lic:/etc/rstudio-connect/license.lic \
+  ghcr.io/posit-dev/connect:${PCT_VERSION}-ubuntu-24.04
+```
+
+Access at http://localhost:3939
+
+### Posit Package Manager
+
+```bash
+export PPM_VERSION="2025.12.0-14"
+docker run -d \
+  -p 4242:4242 \
+  -v /path/to/license.lic:/etc/rstudio-pm/license.lic \
+  ghcr.io/posit-dev/package-manager:${PPM_VERSION}-ubuntu-24.04
+```
+
+Access at http://localhost:4242
+
+### Posit Workbench
+
+```bash
+export PWB_VERSION="2025.09.2-418.pro4"
+docker run -d \
+  -p 8787:8787 \
+  -v /path/to/license.lic:/etc/rstudio-server/license.lic \
+  ghcr.io/posit-dev/workbench:${PWB_VERSION}-ubuntu-24.04
+```
+
+Access at http://localhost:8787
+
+For detailed configuration, environment variables, and volume mounts, see each product's documentation linked below.
+
+## Images
+
+### Posit Connect
+
 | Image | Docker Hub | GitHub Container Registry |
 |-------|------------|---------------------------|
 | `connect` | `docker.io/posit/connect` | `ghcr.io/posit-dev/connect` |
+| `connect-content` | `docker.io/posit/connect-content` | `ghcr.io/posit-dev/connect-content` |
+| `connect-content-init` | `docker.io/posit/connect-content-init` | `ghcr.io/posit-dev/connect-content-init` |
+
+### Posit Package Manager
+
+| Image | Docker Hub | GitHub Container Registry |
+|-------|------------|---------------------------|
 | `package-manager` | [`docker.io/posit/package-manager`](https://hub.docker.com/repository/docker/posit/package-manager/tags) | [`ghcr.io/posit-dev/package-manager`](https://github.com/posit-dev/images-package-manager/pkgs/container/package-manager) |
+
+### Posit Workbench
+
+| Image | Docker Hub | GitHub Container Registry |
+|-------|------------|---------------------------|
 | `workbench` | `docker.io/posit/workbench` | `ghcr.io/posit-dev/workbench` |
+| `workbench-session` | `docker.io/posit/workbench-session` | `ghcr.io/posit-dev/workbench-session` |
+| `workbench-session-init` | `docker.io/posit/workbench-session-init` | `ghcr.io/posit-dev/workbench-session-init` |
+| `workbench-positron-init` | `docker.io/posit/workbench-positron-init` | `ghcr.io/posit-dev/workbench-positron-init` |
+
+## Deploying on Kubernetes
+
+These images work with the [Posit Helm charts](https://docs.posit.co/helm/) for Kubernetes deployments. Add the Helm repository, then configure chart values to use the new images.
+
+```bash
+helm repo add rstudio https://helm.rstudio.com
+helm repo update
+```
+
+### Posit Connect
+
+Configure the `rstudio/rstudio-connect` chart:
+
+```yaml
+image:
+  repository: ghcr.io/posit-dev/connect
+  os: "ubuntu-24.04"
+  tag: ""
+
+launcher:
+  defaultInitContainer:
+    repository: ghcr.io/posit-dev/connect-content-init
+    os: "ubuntu-24.04"
+    tag: ""
+```
+
+The chart includes a default set of content runtime images via `customRuntimeYaml`. Set `customRuntimeYaml: {}` and use `additionalRuntimeImages` to limit to specific images:
+
+```yaml
+launcher:
+  customRuntimeYaml: {}
+  additionalRuntimeImages:
+    - name: ghcr.io/posit-dev/connect-content:R4.5.2-python3.14.3-ubuntu-24.04
+      r:
+        installations:
+          - path: /opt/R/4.5.2/bin/R
+            version: 4.5.2
+      python:
+        installations:
+          - path: /opt/python/3.14.3/bin/python3
+            version: 3.14.3
+      quarto:
+        installations:
+          - path: /opt/quarto/1.8.27/bin/quarto
+            version: 1.8.27
+    - name: ghcr.io/posit-dev/connect-content:R4.4.3-python3.12.12-ubuntu-24.04
+      r:
+        installations:
+          - path: /opt/R/4.4.3/bin/R
+            version: 4.4.3
+      python:
+        installations:
+          - path: /opt/python/3.12.12/bin/python3
+            version: 3.12.12
+      quarto:
+        installations:
+          - path: /opt/quarto/1.8.27/bin/quarto
+            version: 1.8.27
+```
+
+> [!NOTE]
+> Append `-pro` to content image tags for images with Posit Professional Drivers.
+
+### Posit Package Manager
+
+Configure the `rstudio/rstudio-pm` chart:
+
+```yaml
+image:
+  repository: ghcr.io/posit-dev/package-manager
+  os: "ubuntu-24.04"
+  tag: ""
+```
+
+### Posit Workbench
+
+Configure the `rstudio/rstudio-workbench` chart:
+
+```yaml
+image:
+  repository: ghcr.io/posit-dev/workbench
+  os: "ubuntu-24.04"
+  tag: ""
+
+session:
+  image:
+    repository: ghcr.io/posit-dev/workbench-session
+    os: "ubuntu-24.04"
+    rVersion: "4.5.2"
+    pythonVersion: "3.14.3"
+    tag: ""
+  initContainerRepository: ghcr.io/posit-dev/workbench-session-init
+```
+
+> [!NOTE]
+> Session image tags follow the pattern `R{r_version}-python{python_version}-{os}`. To use a second session image with different R/Python versions, add an additional session profile in your Workbench configuration.
+
+### Helm Chart Documentation
+
+- [Connect chart](https://docs.posit.co/helm/charts/rstudio-connect/README.html)
+- [Package Manager chart](https://docs.posit.co/helm/charts/rstudio-pm/README.html)
+- [Workbench chart](https://docs.posit.co/helm/charts/rstudio-workbench/README.html)
+
+## Image Variants
+
+| Variant | Suffix | Description |
+|---------|--------|-------------|
+| Standard | `-std` | Includes R, Python, and Quarto. Runs out of the box. |
+| Minimal | `-min` | Base image for custom builds. Will not run as-is. |
+
+For examples of extending Minimal base images, see https://github.com/posit-dev/images-examples/tree/main/extending
+
+## Image Tag Format
+
+- **Product images**: `{version}-{os}-{variant}` (e.g., `2025.12.1-ubuntu-24.04-std`)
+- **Content/session images**: `R{r_version}-python{python_version}-{os}` (e.g., `R4.5.2-python3.14.3-ubuntu-24.04`)
+- **Short tags**: `{version}` defaults to standard variant
+- **`latest` tag**: most recent version, default OS, standard variant
 
 ## Registries
 
