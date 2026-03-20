@@ -8,38 +8,45 @@
 ### Posit Connect
 
 ```bash
-export PCT_VERSION="2025.12.1"
-docker run -d --privileged \
+PCT_VERSION="2025.12.1"
+docker run -d \
+  --name connect \
+  --privileged \
   -p 3939:3939 \
   -v /path/to/license.lic:/etc/rstudio-connect/license.lic \
   ghcr.io/posit-dev/connect:${PCT_VERSION}-ubuntu-24.04
+  # Can also use docker.io/posit/connect
 ```
 
-Access at http://localhost:3939
+Access Posit Connect at `http://localhost:3939`.
 
 ### Posit Package Manager
 
 ```bash
-export PPM_VERSION="2025.12.0-14"
+PPM_VERSION="2025.12.0-14"
 docker run -d \
+  --name package-manager \
   -p 4242:4242 \
   -v /path/to/license.lic:/etc/rstudio-pm/license.lic \
   ghcr.io/posit-dev/package-manager:${PPM_VERSION}-ubuntu-24.04
+  # Can also use docker.io/posit/package-manager
 ```
 
-Access at http://localhost:4242
+Access Package Manager at `http://localhost:4242`.
 
 ### Posit Workbench
 
 ```bash
-export PWB_VERSION="2025.09.2-418.pro4"
+PWB_VERSION="2025.09.2-418.pro4"
 docker run -d \
+  --name workbench \
   -p 8787:8787 \
   -v /path/to/license.lic:/etc/rstudio-server/license.lic \
   ghcr.io/posit-dev/workbench:${PWB_VERSION}-ubuntu-24.04
+  # Can also use docker.io/posit/workbench
 ```
 
-Access at http://localhost:8787
+Access Workbench at `http://localhost:8787`.
 
 For detailed configuration, environment variables, and volume mounts, see each product's documentation linked below.
 
