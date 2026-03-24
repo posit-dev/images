@@ -1,15 +1,124 @@
 # Posit Container Images
 
-> [!IMPORTANT]
-> These images are under active development and testing and are not yet supported by Posit.
->
-> Please see [rstudio/rstudio-docker-products](https://github.com/rstudio/rstudio-docker-products) for officially supported images.
+> [!NOTE]
+> These images are in preview as Posit migrates container images from [rstudio/rstudio-docker-products](https://github.com/rstudio/rstudio-docker-products). The existing images remain supported.
+
+## Prerequisites
+
+| Tool | Required for | Install |
+|------|-------------|---------|
+| [Docker](https://docs.docker.com/get-docker/) | Running containers locally | [Get Docker](https://docs.docker.com/get-docker/) |
+| Product license | All products | [Licensing FAQ](https://docs.posit.co/licensing/licensing-faq.html) |
+
+## Quick Start
+
+### Posit Connect
+
+```bash
+PCT_VERSION="2026.02.0"
+PCT_IMAGE="ghcr.io/posit-dev/connect"  # or docker.io/posit/connect
+PCT_LICENSE="/path/to/license.lic"
+docker run -d \
+  --name connect \
+  --privileged \
+  -p 3939:3939 \
+  -v ${PCT_LICENSE}:/etc/rstudio-connect/license.lic \
+  ${PCT_IMAGE}:${PCT_VERSION}
+```
+
+Access Posit Connect at `http://localhost:3939`.
+
+See the [Connect installation guide](https://docs.posit.co/connect/admin/getting-started/installation/) for full setup instructions.
+
+### Posit Package Manager
+
+```bash
+PPM_VERSION="2025.12.0"
+PPM_IMAGE="ghcr.io/posit-dev/package-manager"  # or docker.io/posit/package-manager
+PPM_LICENSE="/path/to/license.lic"
+docker run -d \
+  --name package-manager \
+  -p 4242:4242 \
+  -v ${PPM_LICENSE}:/etc/rstudio-pm/license.lic \
+  ${PPM_IMAGE}:${PPM_VERSION}
+```
+
+Access Package Manager at `http://localhost:4242`.
+
+See the [Package Manager installation guide](https://docs.posit.co/rspm/admin/getting-started/installation/) for full setup instructions.
+
+### Posit Workbench
+
+```bash
+PWB_VERSION="2026.01.1"
+PWB_IMAGE="ghcr.io/posit-dev/workbench"  # or docker.io/posit/workbench
+PWB_LICENSE="/path/to/license.lic"
+docker run -d \
+  --name workbench \
+  -p 8787:8787 \
+  -e PWB_TESTUSER=posit \
+  -e PWB_TESTUSER_PASSWD=posit \
+  -v ${PWB_LICENSE}:/etc/rstudio-server/license.lic \
+  ${PWB_IMAGE}:${PWB_VERSION}
+```
+
+Access Workbench at `http://localhost:8787`. Log in with username `posit` and password `posit`.
+
+See the [Workbench installation guide](https://docs.posit.co/ide/server-pro/getting_started/installation/) for full setup instructions.
+
+A [product license](https://docs.posit.co/licensing/licensing-faq.html) is required for each product. Posit recommends license file activation.
+
+## Images
+
+### Posit Connect
 
 | Image | Docker Hub | GitHub Container Registry |
 |-------|------------|---------------------------|
-| `connect` | `docker.io/posit/connect` | `ghcr.io/posit-dev/connect` |
-| `package-manager` | [`docker.io/posit/package-manager`](https://hub.docker.com/repository/docker/posit/package-manager/tags) | [`ghcr.io/posit-dev/package-manager`](https://github.com/posit-dev/images-package-manager/pkgs/container/package-manager) |
-| `workbench` | `docker.io/posit/workbench` | `ghcr.io/posit-dev/workbench` |
+| `connect` | [`docker.io/posit/connect`](https://hub.docker.com/r/posit/connect) | [`ghcr.io/posit-dev/connect`](https://github.com/posit-dev/images-connect/pkgs/container/connect) |
+| `connect-content` | [`docker.io/posit/connect-content`](https://hub.docker.com/r/posit/connect-content) | [`ghcr.io/posit-dev/connect-content`](https://github.com/posit-dev/images-connect/pkgs/container/connect-content) |
+| `connect-content-init` | [`docker.io/posit/connect-content-init`](https://hub.docker.com/r/posit/connect-content-init) | [`ghcr.io/posit-dev/connect-content-init`](https://github.com/posit-dev/images-connect/pkgs/container/connect-content-init) |
+
+### Posit Package Manager
+
+| Image | Docker Hub | GitHub Container Registry |
+|-------|------------|---------------------------|
+| `package-manager` | [`docker.io/posit/package-manager`](https://hub.docker.com/r/posit/package-manager) | [`ghcr.io/posit-dev/package-manager`](https://github.com/posit-dev/images-package-manager/pkgs/container/package-manager) |
+
+### Posit Workbench
+
+| Image | Docker Hub | GitHub Container Registry |
+|-------|------------|---------------------------|
+| `workbench` | [`docker.io/posit/workbench`](https://hub.docker.com/r/posit/workbench) | [`ghcr.io/posit-dev/workbench`](https://github.com/posit-dev/images-workbench/pkgs/container/workbench) |
+| `workbench-session` | [`docker.io/posit/workbench-session`](https://hub.docker.com/r/posit/workbench-session) | [`ghcr.io/posit-dev/workbench-session`](https://github.com/posit-dev/images-workbench/pkgs/container/workbench-session) |
+| `workbench-session-init` | [`docker.io/posit/workbench-session-init`](https://hub.docker.com/r/posit/workbench-session-init) | [`ghcr.io/posit-dev/workbench-session-init`](https://github.com/posit-dev/images-workbench/pkgs/container/workbench-session-init) |
+| `workbench-positron-init` | [`docker.io/posit/workbench-positron-init`](https://hub.docker.com/r/posit/workbench-positron-init) | [`ghcr.io/posit-dev/workbench-positron-init`](https://github.com/posit-dev/images-workbench/pkgs/container/workbench-positron-init) |
+
+## Deploying on Kubernetes
+
+These images work with the [Posit Helm charts](https://docs.posit.co/helm/) for Kubernetes deployments. See each product repository for Helm values and deployment instructions:
+
+- [Connect Helm deployment](https://github.com/posit-dev/images-connect#deploying-on-kubernetes)
+- [Package Manager Helm deployment](https://github.com/posit-dev/images-package-manager#deploying-on-kubernetes)
+- [Workbench Helm deployment](https://github.com/posit-dev/images-workbench#deploying-on-kubernetes)
+
+## Image Variants
+
+| Variant | Suffix | Description |
+|---------|--------|-------------|
+| Standard | `-std` | Includes R, Python, and Quarto. Runs out of the box. |
+| Minimal | `-min` | Base image for custom builds. Will not run as-is. |
+
+For examples of extending Minimal base images, see the [extending examples](https://github.com/posit-dev/images-examples/tree/main/extending).
+
+## Image Tag Format
+
+Ubuntu 24.04 is the default OS for all images.
+
+- `{version}` — Latest OS, standard variant (e.g., `2026.02.0`)
+- `{version}-{os}` — Explicit OS, standard variant (e.g., `2026.02.0-ubuntu-24.04`)
+- `{version}-{os}-{variant}` — Explicit OS and variant (e.g., `2026.02.0-ubuntu-24.04-std`)
+- `latest` — Latest version, default OS, standard variant
+- **Content/session images**: `R{r_version}-python{python_version}-{os}` (e.g., `R4.5.2-python3.14.3-ubuntu-24.04`)
 
 ## Registries
 
@@ -59,7 +168,7 @@ We are adding [multi-platform images](https://docs.docker.com/build/building/mul
 
 [Package Manager](https://github.com/posit-dev/images-package-manager) now has [multi-platform images](https://github.com/orgs/posit-dev/packages/container/package/package-manager).
 
-### Extensibity
+### Extensibility
 
 A single [configuration file][bakery-configuration] (`bakery.yaml`) defines:
 
