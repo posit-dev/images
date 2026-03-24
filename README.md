@@ -28,7 +28,7 @@ docker run -d \
 
 Access Posit Connect at `http://localhost:3939`.
 
-See the [Connect installation guide](https://docs.posit.co/connect/admin/getting-started/installation/) for full setup instructions.
+See the [Connect installation guide](https://docs.posit.co/connect/admin/getting-started/) for full setup instructions.
 
 ### Posit Package Manager
 
