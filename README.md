@@ -12,7 +12,7 @@
 
 ## Quick Start
 
-### Posit Connect
+### [Posit Connect](https://github.com/posit-dev/images-connect)
 
 ```bash
 PCT_VERSION="2026.02.0"
@@ -30,7 +30,7 @@ Access Posit Connect at `http://localhost:3939`.
 
 See the [Connect installation guide](https://docs.posit.co/connect/admin/getting-started/installation/) for full setup instructions.
 
-### Posit Package Manager
+### [Posit Package Manager](https://github.com/posit-dev/images-package-manager)
 
 ```bash
 PPM_VERSION="2025.12.0"
@@ -47,7 +47,7 @@ Access Package Manager at `http://localhost:4242`.
 
 See the [Package Manager installation guide](https://docs.posit.co/rspm/admin/getting-started/installation/) for full setup instructions.
 
-### Posit Workbench
+### [Posit Workbench](https://github.com/posit-dev/images-workbench)
 
 ```bash
 PWB_VERSION="2026.01.1"
@@ -70,7 +70,7 @@ A [product license](https://docs.posit.co/licensing/licensing-faq.html) is requi
 
 ## Images
 
-### Posit Connect
+### [Posit Connect](https://github.com/posit-dev/images-connect)
 
 | Image | Docker Hub | GitHub Container Registry |
 |-------|------------|---------------------------|
@@ -78,13 +78,13 @@ A [product license](https://docs.posit.co/licensing/licensing-faq.html) is requi
 | `connect-content` | [`docker.io/posit/connect-content`](https://hub.docker.com/r/posit/connect-content) | [`ghcr.io/posit-dev/connect-content`](https://github.com/posit-dev/images-connect/pkgs/container/connect-content) |
 | `connect-content-init` | [`docker.io/posit/connect-content-init`](https://hub.docker.com/r/posit/connect-content-init) | [`ghcr.io/posit-dev/connect-content-init`](https://github.com/posit-dev/images-connect/pkgs/container/connect-content-init) |
 
-### Posit Package Manager
+### [Posit Package Manager](https://github.com/posit-dev/images-package-manager)
 
 | Image | Docker Hub | GitHub Container Registry |
 |-------|------------|---------------------------|
 | `package-manager` | [`docker.io/posit/package-manager`](https://hub.docker.com/r/posit/package-manager) | [`ghcr.io/posit-dev/package-manager`](https://github.com/posit-dev/images-package-manager/pkgs/container/package-manager) |
 
-### Posit Workbench
+### [Posit Workbench](https://github.com/posit-dev/images-workbench)
 
 | Image | Docker Hub | GitHub Container Registry |
 |-------|------------|---------------------------|
