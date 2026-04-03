@@ -12,7 +12,7 @@ jobs:
     steps:
 
       - name: GitHub App Token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@v3
         id: app-token
         with:
           app-id: ${{ secrets.APP_ID }}
