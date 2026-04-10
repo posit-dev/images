@@ -84,7 +84,7 @@ The new minimal variant mentioned below is relevant here too: it gives security 
 small, well-defined image to scan instead of a large image with two R versions,
 two Python versions, and drivers they may not need.
 
---
+---
 
 ## 3. New Platform Support: ARM and Ubuntu 24
 
@@ -100,7 +100,7 @@ The old images supported only Ubuntu 22.04 after dropping Ubuntu 18.04 and CentO
 2025. Users who wanted a newer OS had to build their own images from scratch. The new images
 default to Ubuntu 24.04 with Ubuntu 22.04 still available via tag.
 
---
+---
 
 ## 4. Standard and Minimal Variants
 
