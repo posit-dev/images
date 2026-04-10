@@ -80,7 +80,7 @@ weekly with current OS patches.
 **Vulnerability scanning in CI.** Scanning runs in the build pipeline before
 images are published.
 
-The new minimal variant mentioned below is relevant here too: it gives security teams a
+The new Minimal variant is relevant here too: it gives security teams a
 small, well-defined image to scan instead of a large image with two R versions,
 two Python versions, and drivers they may not need.
 
@@ -88,10 +88,10 @@ two Python versions, and drivers they may not need.
 
 ## 3. New Platform Support: ARM and Ubuntu 24
 
-The old images were AMD64-only. As the Posit Team products support ARM, the new
-images are supported ARM as well.
+The old images were AMD64-only. As Posit Team products add ARM support, the new
+images ship ARM builds as well.
 
-The multi-architecture images require no user configuration. `docker pull` selects 
+The multi-architecture images require no user configuration. `docker pull` selects
 the correct architecture for the host.
 
 ### Ubuntu 24.04
