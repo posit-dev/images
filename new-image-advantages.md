@@ -1,6 +1,4 @@
-# New Posit Container Images: Advantages for Marketing
-
-## What Changed
+# New Posit Container Image Advantages
 
 Until now, Posit shipped container images from a single monorepo called
 `rstudio/rstudio-docker-products`. That repo contained hand-written Dockerfiles for
@@ -14,8 +12,6 @@ The new images replace that monorepo with six purpose-built repositories under t
 and release cycle. Shared build tooling (Jinja2 template macros, CI workflows) lives in a
 common `images-shared` repository, but no product image depends on another product's image
 at build time or runtime.
-
----
 
 ## 1. Clean and Simple Naming
 
@@ -66,8 +62,6 @@ posit/connect-content:R4.5.2-python3.14.3-ubuntu-24.04   # content/session matri
 `docker pull posit/connect:2026.02.0` gives you a working image without knowing which
 Ubuntu release it runs on. A `latest` tag is also available for quick evaluation.
 
----
-
 ## 2. Significant Security Improvements
 
 The old repo's images could go weeks or months between OS-level security patches.
@@ -84,8 +78,6 @@ The new Minimal variant is relevant here too: it gives security teams a
 small, well-defined image to scan instead of a large image with two R versions,
 two Python versions, and drivers they may not need.
 
----
-
 ## 3. New Platform Support: ARM and Ubuntu 24
 
 The old images were AMD64-only. As Posit Team products add ARM support, the new
@@ -99,8 +91,6 @@ the correct architecture for the host.
 The old images supported only Ubuntu 22.04 after dropping Ubuntu 18.04 and CentOS 7 in
 2025. Users who wanted a newer OS had to build their own images from scratch. The new images
 default to Ubuntu 24.04 with Ubuntu 22.04 still available via tag.
-
----
 
 ## 4. Standard and Minimal Variants
 
@@ -123,8 +113,6 @@ docker run -d --privileged -p 3939:3939 \
 **Minimal** (`-min` tag suffix) provides the product binaries on a clean Ubuntu base
 without R, Python, Quarto, or drivers. Teams can layer in the specific language
 versions and system libraries they need.
-
----
 
 ## 5. Documented Customization Path
 
@@ -168,8 +156,6 @@ a product version, an engineer edited version variables in the Justfile (`RSC_VE
 this with constraint-based resolution: you define "latest 2 R versions matching >=4.3" and
 Bakery determines the specific versions at build time.
 
----
-
 ## 6. No Shared Base Image Coupling
 
 The old repo used `product-base` and `product-base-pro` as shared foundation layers.
@@ -194,8 +180,6 @@ Each product has its own CI workflows with independent schedules:
 | images-package-manager | Weekly, Sun 03:15 UTC | N/A | Daily |
 
 A CI failure in Connect does not block a Workbench release.
-
----
 
 ## Summary
 
