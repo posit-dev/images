@@ -127,16 +127,10 @@ reading the product Dockerfile and figuring out what to change.
 **Use Bakery for managing a fleet of images.** Organizations maintaining many image variants
 across products and OS versions can use
 [Posit Bakery](https://github.com/posit-dev/images-shared/tree/main/posit-bakery), the same
-Jinja2 templating tool Posit uses to build its own images. A single `bakery.yaml`
+templating tool Posit uses to build its own images. A single `bakery.yaml`
 configuration file defines the build matrix (images, versions, variants, OS choices, language
 version constraints). Bakery resolves compatible dependency versions, renders static
 Containerfiles, and orchestrates parallel builds via `docker buildx bake`.
-
-The old repo also used `docker buildx bake`, but version management was manual. To update
-a product version, an engineer edited version variables in the Justfile (`RSC_VERSION`,
-`RSW_VERSION`, `RSPM_VERSION`), ran `just update-versions`, and opened a PR. Bakery replaces
-this with constraint-based resolution: you define "latest 2 R versions matching >=4.3" and
-Bakery determines the specific versions at build time.
 
 ## 6. No Shared Base Image Coupling
 
@@ -152,16 +146,6 @@ The new images have no shared base images. Each product builds from `ubuntu:24.0
 The macros are imported at template-rendering time, not at Docker build time. Updating how
 R is installed for Connect does not change anything in the Workbench or Package Manager
 images.
-
-Each product has its own CI workflows with independent schedules:
-
-| Repo | Production builds | Content/session builds | Dev builds |
-|------|------------------|----------------------|------------|
-| images-connect | Weekly, Sun 03:15 UTC | Weekly, Sun 04:15 UTC | Daily |
-| images-workbench | Weekly, Sun 03:15 UTC | Weekly, Sun 04:15 UTC | Daily |
-| images-package-manager | Weekly, Sun 03:15 UTC | N/A | Daily |
-
-A CI failure in Connect does not block a Workbench release.
 
 ## Summary
 
