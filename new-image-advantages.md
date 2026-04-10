@@ -64,52 +64,41 @@ posit/connect-content:R4.5.2-python3.14.3-ubuntu-24.04   # content/session matri
 ```
 
 `docker pull posit/connect:2026.02.0` gives you a working image without knowing which
-Ubuntu release it runs on. Codenames are gone; only explicit version numbers are used.
+Ubuntu release it runs on. A `latest` tag is also available for quick evaluation.
 
 ---
 
 ## 2. Significant Security Improvements
 
 The old repo's images could go weeks or months between OS-level security patches.
-When Posit removed an old image version from Docker Hub, customers running that version had
-to update on Posit's timeline or maintain their own builds.
-
 The new images change things:
 
-**Weekly automated rebuilds for all supported product versions.** Not just the latest
+**Weekly automated rebuilds for all supported product versions.** And not just the latest
 release. If Connect 2025.12 and 2026.02 are both under active support, both get rebuilt
 weekly with current OS patches.
 
-**Vulnerability scanning in CI.** Trivy and OpenSCAP run in the build pipeline before
+**Vulnerability scanning in CI.** Scanning runs in the build pipeline before
 images are published.
 
-The Minimal variant is relevant here too: it gives security teams a small, well-defined image
-to scan instead of a large image with two R versions, two Python versions, and drivers they may not need.
+The new minimal variant mentioned below is relevant here too: it gives security teams a
+small, well-defined image to scan instead of a large image with two R versions,
+two Python versions, and drivers they may not need.
 
 --
 
 ## 3. New Platform Support: ARM and Ubuntu 24
 
-The old images were AMD64-only. No ARM builds existed.
+The old images were AMD64-only. As the Posit Team products support ARM, the new
+images are supported ARM as well.
 
-AWS Graviton and Azure Cobalt instances cost 20-30% less than their x86 equivalents.
-Package Manager now ships multi-platform images for both AMD64 and ARM64. The other products
-will follow as Posit adds ARM support.
-
-Multi-platform images require no user configuration. `docker pull` selects the correct
-architecture for the host.
+The multi-architecture images require no user configuration. `docker pull` selects 
+the correct architecture for the host.
 
 ### Ubuntu 24.04
 
 The old images supported only Ubuntu 22.04 after dropping Ubuntu 18.04 and CentOS 7 in
-2025. Users who wanted a newer OS had to build their own images from scratch.
-
-The new images default to Ubuntu 24.04 with Ubuntu 22.04 still available via tag. Ubuntu
-24.04 brings newer system library versions (OpenSSL 3.0, glibc 2.39), more recent default
-Python and compiler toolchains, and security patches from Canonical's current LTS support
-window through 2029. For organizations running on recent Kubernetes node images or cloud
-AMIs that already use 24.04, matching the OS version between host and container avoids
-kernel compatibility surprises.
+2025. Users who wanted a newer OS had to build their own images from scratch. The new images
+default to Ubuntu 24.04 with Ubuntu 22.04 still available via tag.
 
 --
 
@@ -132,10 +121,8 @@ docker run -d --privileged -p 3939:3939 \
 ```
 
 **Minimal** (`-min` tag suffix) provides the product binaries on a clean Ubuntu base
-without R, Python, Quarto, or drivers. Production teams layer in the specific language
-versions and system libraries they need. Security teams can audit and scan a small base
-image. The Minimal variant didn't exist in the old repo. If you wanted a lean image, you
-forked the repo and stripped out what you didn't need.
+without R, Python, Quarto, or drivers. Teams can layer in the specific language
+versions and system libraries they need.
 
 ---
 
