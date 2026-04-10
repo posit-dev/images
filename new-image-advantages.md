@@ -17,7 +17,7 @@ at build time or runtime.
 
 ---
 
-## 1. Clean Branding, Simple Names
+## 1. Clean and Simple Naming
 
 The old images used the `rstudio/` namespace with inconsistent naming conventions:
 
@@ -51,9 +51,69 @@ The product name comes first. Related images share the prefix. No intermediate b
 are published. All images are available from both Docker Hub (`posit/`) and GitHub Container
 Registry (`ghcr.io/posit-dev/`).
 
+### Tag format
+
+The old tags put the OS first (`rstudio/rstudio-connect:ubuntu2204-2026.03.1`) and used
+codenames as aliases (`jammy-2026.03.1`). The new tags put the product version first, with
+OS and variant as optional suffixes:
+
+```
+posit/connect:2026.02.0                          # default OS, standard variant
+posit/connect:2026.02.0-ubuntu-24.04-min         # explicit OS, minimal variant
+posit/connect-content:R4.5.2-python3.14.3-ubuntu-24.04   # content/session matrix
+```
+
+`docker pull posit/connect:2026.02.0` gives you a working image without knowing which
+Ubuntu release it runs on. Codenames are gone; only explicit version numbers are used.
+
 ---
 
-## 2. Standard and Minimal Variants
+## 2. Significant Security Improvements
+
+The old repo's images could go weeks or months between OS-level security patches.
+When Posit removed an old image version from Docker Hub, customers running that version had
+to update on Posit's timeline or maintain their own builds.
+
+The new images change things:
+
+**Weekly automated rebuilds for all supported product versions.** Not just the latest
+release. If Connect 2025.12 and 2026.02 are both under active support, both get rebuilt
+weekly with current OS patches.
+
+**Vulnerability scanning in CI.** Trivy and OpenSCAP run in the build pipeline before
+images are published.
+
+The Minimal variant is relevant here too: it gives security teams a small, well-defined image
+to scan instead of a large image with two R versions, two Python versions, and drivers they may not need.
+
+--
+
+## 3. New Platform Support: ARM and Ubuntu 24
+
+The old images were AMD64-only. No ARM builds existed.
+
+AWS Graviton and Azure Cobalt instances cost 20-30% less than their x86 equivalents.
+Package Manager now ships multi-platform images for both AMD64 and ARM64. The other products
+will follow as Posit adds ARM support.
+
+Multi-platform images require no user configuration. `docker pull` selects the correct
+architecture for the host.
+
+### Ubuntu 24.04
+
+The old images supported only Ubuntu 22.04 after dropping Ubuntu 18.04 and CentOS 7 in
+2025. Users who wanted a newer OS had to build their own images from scratch.
+
+The new images default to Ubuntu 24.04 with Ubuntu 22.04 still available via tag. Ubuntu
+24.04 brings newer system library versions (OpenSSL 3.0, glibc 2.39), more recent default
+Python and compiler toolchains, and security patches from Canonical's current LTS support
+window through 2029. For organizations running on recent Kubernetes node images or cloud
+AMIs that already use 24.04, matching the OS version between host and container avoids
+kernel compatibility surprises.
+
+--
+
+## 4. Standard and Minimal Variants
 
 The old images shipped one variant per product. Each image bundled two R versions, two
 Python versions, Quarto, and professional drivers. You got a large image with predetermined
@@ -71,10 +131,6 @@ docker run -d --privileged -p 3939:3939 \
   posit/connect:2026.02.0
 ```
 
-Someone evaluating Connect goes from zero to a running server in under a minute without
-writing a Dockerfile. The old images could do this too, but the new Standard images make
-this the documented, tested, primary path rather than a side effect of bundling everything.
-
 **Minimal** (`-min` tag suffix) provides the product binaries on a clean Ubuntu base
 without R, Python, Quarto, or drivers. Production teams layer in the specific language
 versions and system libraries they need. Security teams can audit and scan a small base
@@ -83,101 +139,7 @@ forked the repo and stripped out what you didn't need.
 
 ---
 
-## 3. No Shared Base Image Coupling
-
-The old repo used `product-base` and `product-base-pro` as shared foundation layers.
-Connect, Workbench, and Package Manager all inherited from them. If someone updated
-`product-base` to change a system package, add an R version, or modify the Python
-installation, that change propagated to all three products. A bug in the base layer
-could break all product images in a single build. The CI pipeline built all products
-together or not at all.
-
-The new images have no shared base images. Each product builds from `ubuntu:24.04` (or
-`ubuntu:22.04`) and uses shared Jinja2 macros to install R, Python, and system packages.
-The macros are imported at template-rendering time, not at Docker build time. Updating how
-R is installed for Connect does not change a single byte in the Workbench or Package Manager
-images.
-
-Each product has its own CI workflows with independent schedules:
-
-| Repo | Production builds | Content/session builds | Dev builds |
-|------|------------------|----------------------|------------|
-| images-connect | Weekly, Sun 03:15 UTC | Weekly, Sun 04:15 UTC | Daily |
-| images-workbench | Weekly, Sun 03:15 UTC | Weekly, Sun 04:15 UTC | Daily |
-| images-package-manager | Weekly, Sun 03:15 UTC | N/A | Daily |
-
-A CI failure in Connect does not block a Workbench release.
-
----
-
-## 4. Built for Kubernetes
-
-The old repo was Docker-first. Kubernetes support came through a few additional images
-(`content-base`, `content-pro`, `r-session-complete`, `connect-content-init`) that were
-built alongside the main product images but documented as secondary. The content images
-had a fixed build matrix of nine R-Python-Quarto combinations defined in `docker-bake.hcl`.
-If you needed a combination outside that matrix, you built your own.
-
-The new images treat Kubernetes as a deployment target with equal weight to standalone
-Docker. Each product ships a complete image set:
-
-**Connect:** `connect` (server) + `connect-content` (R x Python matrix) + `connect-content-init`
-
-**Workbench:** `workbench` (server) + `workbench-session` (R x Python matrix) + `workbench-session-init` + `workbench-positron-init`
-
-The content and session matrix is defined per product in its own `bakery.yaml` and can be
-extended without touching another product's configuration. Tags follow a consistent format:
-`R4.5.2-python3.14.3-ubuntu-24.04`. Each image contains one R version and one Python
-version. You pick the combinations you need instead of pulling a large image with multiple
-language versions.
-
-The init container pattern separates product components from language runtimes. When Posit
-ships a product update, the init container injects updated components at pod startup. You
-don't rebuild content or session images after a Connect or Workbench upgrade. The old
-`connect-content-init` existed but the pattern was not documented as a primary workflow.
-
----
-
-## 5. Security Improvements
-
-The old repo's README included this disclaimer:
-
-> Images are provided AS IS based on the build environment at the time their product version
-> was released/updated.
-
-And this warning:
-
-> Outdated images will be removed periodically from DockerHub as product version updates
-> are made.
-
-In practice, this meant images could go weeks or months between OS-level security patches.
-When Posit removed an old image version from Docker Hub, customers running that version had
-to update on Posit's timeline or maintain their own builds.
-
-The new images change four things:
-
-**Weekly automated rebuilds for all supported product versions.** Not just the latest
-release. If Connect 2025.12 and 2026.02 are both under active support, both get rebuilt
-weekly with current OS patches.
-
-**Vulnerability scanning in CI.** Trivy and OpenSCAP run in the build pipeline before
-images are published.
-
-**Ubuntu 24.04 as the default OS.** The old images supported only Ubuntu 22.04 (after
-dropping Ubuntu 18.04 and CentOS 7 in 2025). The new images default to 24.04 with 22.04
-still available.
-
-**Independent supply chains per product.** Because no product image inherits from a shared
-base, a vulnerability in one product's image does not create exposure in another product's
-images. Security teams can evaluate each product's images on their own merits.
-
-For organizations operating under SOC 2, HIPAA, or FedRAMP compliance, the Minimal variant
-is relevant here too: it gives security teams a small, well-defined image to scan instead of
-a large image with two R versions, two Python versions, and drivers they may not need.
-
----
-
-## 6. Documented Customization Path
+## 5. Documented Customization Path
 
 The old repo's guidance for customization was to fork the entire monorepo:
 
@@ -221,37 +183,30 @@ Bakery determines the specific versions at build time.
 
 ---
 
-## 7. Multi-Platform Support (ARM)
+## 6. No Shared Base Image Coupling
 
-The old images were AMD64-only. No ARM builds existed.
+The old repo used `product-base` and `product-base-pro` as shared foundation layers.
+Connect, Workbench, and Package Manager all inherited from them. If someone updated
+`product-base` to change a system package, add an R version, or modify the Python
+installation, that change propagated to all three products. A bug in the base layer
+could break all product images in a single build. The CI pipeline built all products
+together or not at all.
 
-AWS Graviton and Azure Cobalt instances cost 20-30% less than their x86 equivalents.
-Package Manager now ships multi-platform images for both AMD64 and ARM64. The other products
-will follow as Posit adds ARM support.
+The new images have no shared base images. Each product builds from `ubuntu:24.04` (or
+`ubuntu:22.04`) and uses shared macros to install R, Python, and system packages.
+The macros are imported at template-rendering time, not at Docker build time. Updating how
+R is installed for Connect does not change anything in the Workbench or Package Manager
+images.
 
-Multi-platform images require no user configuration. `docker pull` selects the correct
-architecture for the host.
+Each product has its own CI workflows with independent schedules:
 
----
+| Repo | Production builds | Content/session builds | Dev builds |
+|------|------------------|----------------------|------------|
+| images-connect | Weekly, Sun 03:15 UTC | Weekly, Sun 04:15 UTC | Daily |
+| images-workbench | Weekly, Sun 03:15 UTC | Weekly, Sun 04:15 UTC | Daily |
+| images-package-manager | Weekly, Sun 03:15 UTC | N/A | Daily |
 
-## 8. Better Documentation Per Image
-
-The old repo had a top-level README that covered all products and per-product READMEs that
-varied in depth. Environment variables used the `RSC_`, `RSW_`, and `RSPM_` prefixes, which
-reflected the old RStudio branding.
-
-Each new image has a standalone README covering:
-- Quick start with a working `docker run` command
-- Variant comparison table (Standard vs Minimal)
-- Tag format documentation with examples
-- License activation options (file, key, floating server)
-- Environment variables with the new `PCT_`, `PWB_`, `PPM_` prefixes (legacy prefixes
-  still work for backward compatibility)
-- Volume mount documentation
-- A "Differences from rstudio/..." table comparing old and new images
-
-The per-image README is self-contained. A customer reading the Connect image README
-does not need to read the Workbench or meta-repository documentation to deploy Connect.
+A CI failure in Connect does not block a Workbench release.
 
 ---
 
