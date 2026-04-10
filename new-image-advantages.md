@@ -1,21 +1,12 @@
 # New Posit Container Image Advantages
 
 Until now, Posit shipped container images from a single monorepo called
-`rstudio/rstudio-docker-products`. That repo contained hand-written Dockerfiles for
-Connect, Workbench, and Package Manager, along with shared base images (`product-base`
-and `product-base-pro`) that all three products inherited from. A single `docker-bake.hcl`
-file at the repo root defined versions for R, Python, Quarto, and professional drivers
-across all products at once.
-
-The new images replace that monorepo with six purpose-built repositories under the
-`posit-dev` GitHub organization. Each product has its own image definitions, CI pipelines,
-and release cycle. Shared build tooling (Jinja2 template macros, CI workflows) lives in a
-common `images-shared` repository, but no product image depends on another product's image
-at build time or runtime.
+`rstudio/rstudio-docker-products`. The new images replace that monorepo with multple repos
+under `posit-dev` GitHub organization with many additional changes as shared below.
 
 ## 1. Clean and Simple Naming
 
-The old images used the `rstudio/` namespace with inconsistent naming conventions:
+The old images used the `rstudio/` namespace these naming conventions:
 
 | Old Name | Role |
 |----------|------|
@@ -27,8 +18,6 @@ The old images used the `rstudio/` namespace with inconsistent naming convention
 | `rstudio/content-pro` | Connect content runtime with drivers |
 | `rstudio/product-base` | Shared base layer |
 | `rstudio/product-base-pro` | Shared base layer with drivers |
-
-Eight images, three naming patterns, two that only exist as intermediate build layers.
 
 The new images use the `posit/` namespace with one naming pattern:
 
@@ -43,14 +32,10 @@ The new images use the `posit/` namespace with one naming pattern:
 | `posit/workbench-session-init` | Workbench session init container |
 | `posit/workbench-positron-init` | Positron IDE init container |
 
-The product name comes first. Related images share the prefix. No intermediate build layers
-are published. All images are available from both Docker Hub (`posit/`) and GitHub Container
-Registry (`ghcr.io/posit-dev/`).
+All images are available from both Docker Hub (`posit/`) and GitHub Container Registry (`ghcr.io/posit-dev/`).
 
-### Tag format
-
-The old tags put the OS first (`rstudio/rstudio-connect:ubuntu2204-2026.03.1`) and used
-codenames as aliases (`jammy-2026.03.1`). The new tags put the product version first, with
+The tagging has also improved. The old tags put the OS first (`rstudio/rstudio-connect:ubuntu2204-2026.03.1`)
+and used codenames as aliases (`jammy-2026.03.1`). The new tags put the product version first, with
 OS and variant as optional suffixes:
 
 ```
@@ -59,13 +44,13 @@ posit/connect:2026.02.0-ubuntu-24.04-min         # explicit OS, minimal variant
 posit/connect-content:R4.5.2-python3.14.3-ubuntu-24.04   # content/session matrix
 ```
 
-`docker pull posit/connect:2026.02.0` gives you a working image without knowing which
-Ubuntu release it runs on. A `latest` tag is also available for quick evaluation.
+`docker pull posit/connect:2026.02.0` gives you a working image, and a
+`latest` tag is also available for quick evaluation.
 
 ## 2. Significant Security Improvements
 
 The old repo's images could go weeks or months between OS-level security patches.
-The new images change things:
+It was up to each user to apply more patches if wanted. The new images change things:
 
 **Weekly automated rebuilds for all supported product versions.** And not just the latest
 release. If Connect 2025.12 and 2026.02 are both under active support, both get rebuilt
@@ -86,11 +71,8 @@ images ship ARM builds as well.
 The multi-architecture images require no user configuration. `docker pull` selects
 the correct architecture for the host.
 
-### Ubuntu 24.04
-
-The old images supported only Ubuntu 22.04 after dropping Ubuntu 18.04 and CentOS 7 in
-2025. Users who wanted a newer OS had to build their own images from scratch. The new images
-default to Ubuntu 24.04 with Ubuntu 22.04 still available via tag.
+The old images supported only Ubuntu 22.04 after dropping Ubuntu 18.04 and CentOS 7.
+The new images default to Ubuntu 24.04 with Ubuntu 22.04 still available via tag.
 
 ## 4. Standard and Minimal Variants
 
@@ -189,7 +171,7 @@ A CI failure in Connect does not block a Workbench release.
 | Variants | One variant per product (large, bundled) | Standard (runs immediately) + Minimal (extend it) |
 | Base images | Shared `product-base` / `product-base-pro` coupling all products | No shared base. Each product builds from Ubuntu + shared macros |
 | Kubernetes | Content/session images as secondary, fixed 9-combo matrix | Full image sets per product, configurable matrix per product |
-| Security | "Provided AS IS," periodic image removal | Weekly rebuilds across all supported versions, CI scanning |
+| Security | "Provided as is," periodic image removal | Weekly rebuilds across all supported versions, CI scanning |
 | Customization | "Fork the monorepo" | Extending examples, Bakery CLI, or just use Standard |
 | Version management | Manual edits to Justfile variables | Constraint-based resolution in `bakery.yaml` |
 | ARM | Not available | Package Manager ships ARM, others following |
