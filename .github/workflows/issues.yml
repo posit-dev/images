@@ -19,7 +19,7 @@ jobs:
           private-key: ${{ secrets.POSIT_PLATFORM_PEM }}
 
       - name: Add to Platform Carbon Project
-        uses: actions/add-to-project@v1.0.2
+        uses: actions/add-to-project@v2.0.0
         with:
           github-token: ${{ steps.app-token.outputs.token }}
           project-url: https://github.com/orgs/posit-dev/projects/17
