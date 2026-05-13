@@ -1,14 +1,28 @@
+<p>
+<a href="https://posit.co/">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://cdn.posit.co/platform/containers/logos/Posit-Logos-2024_horiz-reverse-quarto-web.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://cdn.posit.co/platform/containers/logos/Posit-Logos-2024_horiz-full-color-quarto-web.svg">
+  <img alt="Posit Logo" src="https://cdn.posit.co/platform/containers/logos/Posit-Logos-2024_horiz-full-color-quarto-web.svg" height="120">
+</picture>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<img alt="Container cube" src="https://cdn.posit.co/platform/containers/logos/container_cube.svg" height="120">
+</a>
+</p>
+
 # Posit Container Images
+
+This is the home repository for Posit Container Images, which includes images for [Posit Connect](https://docs.posit.co/connect/), [Posit Package Manager](https://docs.posit.co/rspm/), and [Posit Workbench](https://docs.posit.co/ide/server-pro/).
 
 > [!NOTE]
 > These images are in preview as Posit migrates container images from [rstudio/rstudio-docker-products](https://github.com/rstudio/rstudio-docker-products). The existing images remain supported.
 
 ## Prerequisites
 
-| Tool | Required for | Install |
-|------|-------------|---------|
-| [Docker](https://docs.docker.com/get-docker/) | Running containers locally | [Get Docker](https://docs.docker.com/get-docker/) |
-| Product license | All products | [Licensing FAQ](https://docs.posit.co/licensing/licensing-faq.html) |
+| Tool | Required for | Install                                                                    |
+|------|-------------|----------------------------------------------------------------------------|
+| [Docker](https://docs.docker.com/get-docker/) | Running containers locally | [Get Docker](https://docs.docker.com/get-docker/)                          |
+| Product license | All products | [Licensing FAQ](https://docs.posit.co/licensing/licensing-faq.html), [Request a trial license](https://posit.co/trial-license/) |
 
 ## Quick Start
 
@@ -68,6 +82,56 @@ See the [Workbench installation guide](https://docs.posit.co/ide/server-pro/gett
 
 A [product license](https://docs.posit.co/licensing/licensing-faq.html) is required for each product. Posit recommends license file activation.
 
+### With Docker Compose
+
+Run all three products together. Update the license file paths on the host (and the optional configuration file paths) before starting the stack.
+
+```yaml
+services:
+  connect:
+    image: ghcr.io/posit-dev/connect:latest
+    privileged: true
+    ports:
+      - "3939:3939"
+    volumes:
+      - /path/to/connect-license.lic:/etc/rstudio-connect/license.lic
+      - /path/to/rstudio-connect.gcfg:/etc/rstudio-connect/rstudio-connect.gcfg:ro
+      - connect-data:/var/lib/rstudio-connect
+    restart: unless-stopped
+
+  package-manager:
+    image: ghcr.io/posit-dev/package-manager:latest
+    ports:
+      - "4242:4242"
+    volumes:
+      - /path/to/package-manager-license.lic:/etc/rstudio-pm/license.lic
+      - /path/to/rstudio-pm.gcfg:/etc/rstudio-pm/rstudio-pm.gcfg:ro
+      - package-manager-data:/var/lib/rstudio-pm
+    restart: unless-stopped
+
+  workbench:
+    image: ghcr.io/posit-dev/workbench:latest
+    ports:
+      - "8787:8787"
+    environment:
+      PWB_TESTUSER: posit
+      PWB_TESTUSER_PASSWD: posit
+    volumes:
+      - /path/to/workbench-license.lic:/etc/rstudio-server/license.lic
+      - /path/to/rstudio:/etc/rstudio:ro
+      - workbench-home:/home
+      - workbench-shared:/var/lib/rstudio-server
+    restart: unless-stopped
+
+volumes:
+  connect-data:
+  package-manager-data:
+  workbench-home:
+  workbench-shared:
+```
+
+Start the stack with `docker compose up -d`. Access Connect at `http://localhost:3939`, Package Manager at `http://localhost:4242`, and Workbench at `http://localhost:8787` (log in with username `posit` and password `posit`).
+
 ## Images
 
 ### [Posit Connect](https://github.com/posit-dev/images-connect)
@@ -103,10 +167,10 @@ These images work with the [Posit Helm charts](https://docs.posit.co/helm/) for 
 
 ## Image Variants
 
-| Variant | Suffix | Description |
-|---------|--------|-------------|
-| Standard | `-std` | Includes R, Python, and Quarto. Runs out of the box. |
-| Minimal | `-min` | Base image for custom builds. Will not run as-is. |
+| Variant | Suffix | Description                                                        |
+|---------|--------|--------------------------------------------------------------------|
+| Standard | `-std` | Includes R, Python, and Quarto. Runs out of the box.               |
+| Minimal | `-min` | Base image for custom builds. Not fully functional until extended. |
 
 For examples of extending Minimal base images, see the [extending examples](https://github.com/posit-dev/images-examples/tree/main/extending).
 
@@ -160,13 +224,13 @@ Each `Containerfile` (or `Dockerfile`) is static and can be built using multiple
 
 ### Security
 
-Rapidly address security concerns by supporting scanning and routinely rebuilding images for [all supported product versions](https://docs.posit.co/supported-versions/).
+Posit rebuilds images for [all supported product versions](https://docs.posit.co/supported-versions/) on a weekly basis to ensure system packages are using the latest security patches.
 
 ### ARM Support
 
-We are adding [multi-platform images](https://docs.docker.com/build/building/multi-platform/) as Posit rolls out support for ARM chipsets.
+We are adding [multi-platform images](https://docs.docker.com/build/building/multi-platform/) as Posit rolls out support for ARM64 chipsets.
 
-[Package Manager](https://github.com/posit-dev/images-package-manager) now has [multi-platform images](https://github.com/orgs/posit-dev/packages/container/package/package-manager).
+[Package Manager](https://github.com/posit-dev/images-package-manager) and [Connect](https://github.com/posit-dev/images-connect) now have multi-platform images that support both `linux/amd64` and `linux/arm64`.
 
 ### Extensibility
 
@@ -195,11 +259,11 @@ We expect all contributors to adhere to the project's [Code of Conduct](CODE_OF_
 
 Posit Container Images and associated tooling are licensed under the [MIT License](LICENSE.md)
 
-[bakery-configuration]: https://github.com/posit-dev/images-shared/blob/main/posit-bakery/CONFIGURATION.md#bakery-configuration
-[bakery-image]: https://github.com/posit-dev/images-shared/blob/main/posit-bakery/CONFIGURATION.md#image
-[bakery-version]: https://github.com/posit-dev/images-shared/blob/main/posit-bakery/CONFIGURATION.md#imageversion
-[bakery-variant]: https://github.com/posit-dev/images-shared/blob/main/posit-bakery/CONFIGURATION.md#imagevariant
-[bakery-dependency]: https://github.com/posit-dev/images-shared/blob/main/posit-bakery/CONFIGURATION.md#dependencyconstraint
-[bakery-os]: https://github.com/posit-dev/images-shared/blob/main/posit-bakery/CONFIGURATION.md#imageversionos
-[bakery-tag]: https://github.com/posit-dev/images-shared/blob/main/posit-bakery/CONFIGURATION.md#tagpattern
-[bakery-registry]: https://github.com/posit-dev/images-shared/blob/main/posit-bakery/CONFIGURATION.md#registry
+[bakery-configuration]: https://posit-dev.github.io/images-shared/configuration.html#bakery-configuration
+[bakery-image]: https://posit-dev.github.io/images-shared/configuration.html#image
+[bakery-version]: https://posit-dev.github.io/images-shared/configuration.html#imageversion
+[bakery-variant]: https://posit-dev.github.io/images-shared/configuration.html#imagevariant
+[bakery-dependency]: https://posit-dev.github.io/images-shared/configuration.html#dependencyconstraint
+[bakery-os]: https://posit-dev.github.io/images-shared/configuration.html#imageversionos
+[bakery-tag]: https://posit-dev.github.io/images-shared/configuration.html#tagpattern
+[bakery-registry]: https://posit-dev.github.io/images-shared/configuration.html#registry
