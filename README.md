@@ -1,8 +1,5 @@
 # Posit Container Images
 
-> [!NOTE]
-> These images are in preview as Posit migrates container images from [rstudio/rstudio-docker-products](https://github.com/rstudio/rstudio-docker-products). The existing images remain supported.
-
 ## Prerequisites
 
 | Tool | Required for | Install |
