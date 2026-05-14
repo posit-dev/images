@@ -14,9 +14,6 @@
 
 This is the home repository for Posit container images, which includes images for [Posit Connect](https://docs.posit.co/connect/), [Posit Package Manager](https://docs.posit.co/rspm/), and [Posit Workbench](https://docs.posit.co/ide/server-pro/).
 
-> [!NOTE]
-> These images are in preview as Posit migrates container images from [rstudio/rstudio-docker-products](https://github.com/rstudio/rstudio-docker-products). The existing images remain supported.
-
 ## Prerequisites
 
 | Tool | Required for | Install                                                                    |
