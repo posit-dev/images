@@ -154,11 +154,11 @@ Start the stack with `docker compose up -d`. Access Connect at `http://localhost
 
 ## Deploying on Kubernetes
 
-These images work with the [Posit Helm charts](https://docs.posit.co/helm/) for Kubernetes deployments. See each product repository for Helm values and deployment instructions:
+These images are the default in [Posit Helm chart](https://docs.posit.co/helm/) versions `>= 0.20.0`. See the [image migration guide](https://docs.posit.co/helm/docs/migrating-to-posit-images.html) if you are upgrading from an earlier chart version, or each product's chart docs for configuration:
 
-- [Connect Helm deployment](https://github.com/posit-dev/images-connect#deploying-on-kubernetes)
-- [Package Manager Helm deployment](https://github.com/posit-dev/images-package-manager#deploying-on-kubernetes)
-- [Workbench Helm deployment](https://github.com/posit-dev/images-workbench#deploying-on-kubernetes)
+- [Posit Connect Helm chart](https://docs.posit.co/helm/charts/rstudio-connect/README.html)
+- [Posit Package Manager Helm chart](https://docs.posit.co/helm/charts/rstudio-pm/README.html)
+- [Posit Workbench Helm chart](https://docs.posit.co/helm/charts/rstudio-workbench/README.html)
 
 ## Image variants
 
