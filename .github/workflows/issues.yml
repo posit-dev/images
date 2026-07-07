@@ -15,7 +15,7 @@ jobs:
         uses: actions/create-github-app-token@v3
         id: app-token
         with:
-          app-id: ${{ secrets.POSIT_PLATFORM_APP_ID }}
+          client-id: ${{ secrets.POSIT_PLATFORM_CLIENT_ID }}
           private-key: ${{ secrets.POSIT_PLATFORM_PEM }}
 
       - name: Add to Platform Carbon Project
