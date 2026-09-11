@@ -162,7 +162,7 @@ These images are the default in [Posit Helm chart](https://docs.posit.co/helm/) 
 
 ## Differences from old images
 
-These images replace the ones at [rstudio/rstudio-docker-products](https://github.com/rstudio/rstudio-docker-products). Posit keeps updating the old images until the end of 2026 and then stops publishing them. For the full set of changes, including Helm chart values, see the [image migration guide](https://docs.posit.co/helm/docs/migrating-to-posit-images.html).
+These images replace the ones at [rstudio/rstudio-docker-products](https://github.com/rstudio/rstudio-docker-products). Posit will keep updating the old images until the end of 2026 and then will stop publishing them. For the full set of changes, including Helm chart values, see the [image migration guide](https://docs.posit.co/helm/docs/migrating-to-posit-images.html).
 
 | Old image | New image |
 |-----------|-----------|
@@ -175,9 +175,7 @@ These images replace the ones at [rstudio/rstudio-docker-products](https://githu
 | `rstudio/workbench-session-init` | `posit/workbench-session-init` |
 | `rstudio/workbench-positron-init` | `posit/workbench-positron-init` |
 
-The new images are published to both `docker.io/posit` and `ghcr.io/posit-dev`. See [Images](#images) for the full registry paths.
-
-Other changes to expect when you switch:
+Changes of note for when you switch:
 
 - Tags put the version first. `ubuntu2204-2026.04.1` becomes `2026.04.1-ubuntu-24.04`. See [Image tag format](#image-tag-format).
 - The default OS is Ubuntu 24.04 instead of Ubuntu 22.04.
