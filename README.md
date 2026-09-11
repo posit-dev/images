@@ -160,6 +160,33 @@ These images are the default in [Posit Helm chart](https://docs.posit.co/helm/) 
 - [Posit Package Manager Helm chart](https://docs.posit.co/helm/charts/rstudio-pm/README.html)
 - [Posit Workbench Helm chart](https://docs.posit.co/helm/charts/rstudio-workbench/README.html)
 
+## Differences from old images
+
+These images replace the ones at [rstudio/rstudio-docker-products](https://github.com/rstudio/rstudio-docker-products). Posit keeps updating the old images until the end of 2026 and then stops publishing them. For the full set of changes, including Helm chart values, see the [image migration guide](https://docs.posit.co/helm/docs/migrating-to-posit-images.html).
+
+| Old image | New image |
+|-----------|-----------|
+| `rstudio/rstudio-connect` | `posit/connect` |
+| `rstudio/content-base`, `rstudio/content-pro` | `posit/connect-content` |
+| `rstudio/rstudio-connect-content-init` | `posit/connect-content-init` |
+| `rstudio/rstudio-package-manager` | `posit/package-manager` |
+| `rstudio/rstudio-workbench` | `posit/workbench` |
+| `rstudio/r-session-complete`, `rstudio/workbench-session` | `posit/workbench-session` |
+| `rstudio/workbench-session-init` | `posit/workbench-session-init` |
+| `rstudio/workbench-positron-init` | `posit/workbench-positron-init` |
+
+The new images are published to both `docker.io/posit` and `ghcr.io/posit-dev`. See [Images](#images) for the full registry paths.
+
+Other changes to expect when you switch:
+
+- Tags put the version first. `ubuntu2204-2026.04.1` becomes `2026.04.1-ubuntu-24.04`. See [Image tag format](#image-tag-format).
+- The default OS is Ubuntu 24.04 instead of Ubuntu 22.04.
+- Each image bundles one R version and one Python version rather than two of each.
+- License environment variables use per-product prefixes. `RSW_LICENSE` and `RSP_LICENSE` become `PWB_LICENSE`, `RSC_LICENSE` becomes `PCT_LICENSE`, and `RSPM_LICENSE` becomes `PPM_LICENSE`, with the same rename for the matching `_LICENSE_SERVER` and `_LICENSE_FILE_PATH` variables. The old names still work.
+- The content base and pro images are one repository now. The pro image is a `-pro` tag suffix, for example `posit/connect-content:R4.5.2-python3.14.3-ubuntu-24.04-pro`.
+- The Minimal (`-min`) variant replaces the product base images as the starting point for custom builds, and the Standard (`-std`) variant runs out of the box. See [Image variants](#image-variants).
+- Quarto is at `/usr/local/bin/quarto` and Python is under `/opt/python/{version}/bin/python`.
+
 ## Image variants
 
 | Variant  | Suffix | Description                                                                                                                                                |
