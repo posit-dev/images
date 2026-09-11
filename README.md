@@ -184,8 +184,8 @@ Other changes to expect when you switch:
 - Each image bundles one R version and one Python version rather than two of each.
 - License environment variables use per-product prefixes. `RSW_LICENSE` and `RSP_LICENSE` become `PWB_LICENSE`, `RSC_LICENSE` becomes `PCT_LICENSE`, and `RSPM_LICENSE` becomes `PPM_LICENSE`, with the same rename for the matching `_LICENSE_SERVER` and `_LICENSE_FILE_PATH` variables. The old names still work.
 - The content base and pro images are one repository now. The pro image is a `-pro` tag suffix, for example `posit/connect-content:R4.5.2-python3.14.3-ubuntu-24.04-pro`.
-- The Minimal (`-min`) variant replaces the product base images as the starting point for custom builds, and the Standard (`-std`) variant runs out of the box. See [Image variants](#image-variants).
-- Quarto is at `/usr/local/bin/quarto` and Python is under `/opt/python/{version}/bin/python`.
+- Each product image comes in a Standard (`-std`) and a Minimal (`-min`) variant instead of a single image. See [Image variants](#image-variants).
+- Quarto is on the `PATH` at `/usr/local/bin/quarto` rather than under a version-scoped path such as `/opt/quarto/1.8.25/bin/quarto`.
 
 ## Image variants
 
