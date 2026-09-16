@@ -160,6 +160,23 @@ These images are the default in [Posit Helm chart](https://docs.posit.co/helm/) 
 - [Posit Package Manager Helm chart](https://docs.posit.co/helm/charts/rstudio-pm/README.html)
 - [Posit Workbench Helm chart](https://docs.posit.co/helm/charts/rstudio-workbench/README.html)
 
+## Differences from legacy images
+
+These images replace the ones at [rstudio/rstudio-docker-products](https://github.com/rstudio/rstudio-docker-products). Posit will keep updating the legacy images until the end of 2026 and will stop publishing them after that. The images already published will remain available.
+
+See the [image migration guide](https://docs.posit.co/helm/docs/migrating-to-posit-images.html) for Helm chart migration. The Posit image links below point to image-specific migration guidance.
+
+| Legacy image | New image |
+|-----------|-----------|
+| `rstudio/rstudio-connect` | [`posit/connect`](https://github.com/posit-dev/images-connect/blob/main/connect/README.md#migrating-from-legacy-image) |
+| `rstudio/content-base`, `rstudio/content-pro` | [`posit/connect-content`](https://github.com/posit-dev/images-connect/blob/main/connect-content/README.md#migrating-from-legacy-image) |
+| `rstudio/rstudio-connect-content-init` | [`posit/connect-content-init`](https://github.com/posit-dev/images-connect/blob/main/connect-content-init/README.md#migrating-from-legacy-image) |
+| `rstudio/rstudio-package-manager` | [`posit/package-manager`](https://github.com/posit-dev/images-package-manager/blob/main/package-manager/README.md#migrating-from-legacy-image) |
+| `rstudio/rstudio-workbench` | [`posit/workbench`](https://github.com/posit-dev/images-workbench/blob/main/workbench/README.md#migrating-from-legacy-image) |
+| `rstudio/r-session-complete`, `rstudio/workbench-session` | [`posit/workbench-session`](https://github.com/posit-dev/images-workbench/blob/main/workbench-session/README.md#migrating-from-legacy-image) |
+| `rstudio/workbench-session-init` | [`posit/workbench-session-init`](https://github.com/posit-dev/images-workbench/blob/main/workbench-session-init/README.md#migrating-from-legacy-image) |
+| `rstudio/workbench-positron-init` | [`posit/workbench-positron-init`](https://github.com/posit-dev/images-workbench/blob/main/workbench-positron-init/README.md#migrating-from-legacy-image) |
+
 ## Image variants
 
 | Variant  | Suffix | Description                                                                                                                                                |
