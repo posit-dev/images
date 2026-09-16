@@ -164,7 +164,7 @@ These images are the default in [Posit Helm chart](https://docs.posit.co/helm/) 
 
 These images replace the ones at [rstudio/rstudio-docker-products](https://github.com/rstudio/rstudio-docker-products). Posit will keep updating the legacy images until the end of 2026 and will stop publishing them after that. The images already published will remain available.
 
-The [image migration guide](https://docs.posit.co/helm/docs/migrating-to-posit-images.html) covers the full migration, including Helm chart values. The changes below are the ones in the images themselves.
+The [image migration guide](https://docs.posit.co/helm/docs/migrating-to-posit-images.html) covers the full migration, including Helm chart values. The changes below are the ones in the images themselves for reference.
 
 | Legacy image | New image |
 |-----------|-----------|
