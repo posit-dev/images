@@ -160,11 +160,13 @@ These images are the default in [Posit Helm chart](https://docs.posit.co/helm/) 
 - [Posit Package Manager Helm chart](https://docs.posit.co/helm/charts/rstudio-pm/README.html)
 - [Posit Workbench Helm chart](https://docs.posit.co/helm/charts/rstudio-workbench/README.html)
 
-## Differences from old images
+## Differences from legacy images
 
-These images replace the ones at [rstudio/rstudio-docker-products](https://github.com/rstudio/rstudio-docker-products). Posit will keep updating the old images until the end of 2026 and then will stop publishing them. For the full set of changes, including Helm chart values, see the [image migration guide](https://docs.posit.co/helm/docs/migrating-to-posit-images.html).
+These images replace the ones at [rstudio/rstudio-docker-products](https://github.com/rstudio/rstudio-docker-products). Posit will keep updating the legacy images until the end of 2026 and will stop publishing them after that. The images already published will remain available.
 
-| Old image | New image |
+The [image migration guide](https://docs.posit.co/helm/docs/migrating-to-posit-images.html) covers the full migration, including Helm chart values. The changes below are the ones in the images themselves.
+
+| Legacy image | New image |
 |-----------|-----------|
 | `rstudio/rstudio-connect` | `posit/connect` |
 | `rstudio/content-base`, `rstudio/content-pro` | `posit/connect-content` |
@@ -180,7 +182,7 @@ Changes of note for when you switch:
 - Tags put the version first. `ubuntu2204-2026.04.1` becomes `2026.04.1-ubuntu-24.04`. See [Image tag format](#image-tag-format).
 - The default OS is Ubuntu 24.04 instead of Ubuntu 22.04.
 - Each image bundles one R version and one Python version rather than two of each.
-- License environment variables use per-product prefixes. `RSW_LICENSE` and `RSP_LICENSE` become `PWB_LICENSE`, `RSC_LICENSE` becomes `PCT_LICENSE`, and `RSPM_LICENSE` becomes `PPM_LICENSE`, with the same rename for the matching `_LICENSE_SERVER` and `_LICENSE_FILE_PATH` variables. The old names still work.
+- License environment variables use per-product prefixes. `RSW_LICENSE` and `RSP_LICENSE` become `PWB_LICENSE`, `RSC_LICENSE` becomes `PCT_LICENSE`, and `RSPM_LICENSE` becomes `PPM_LICENSE`, with the same rename for the matching `_LICENSE_SERVER` and `_LICENSE_FILE_PATH` variables. The legacy names still work.
 - The content base and pro images are one repository now. The pro image is a `-pro` tag suffix, for example `posit/connect-content:R4.5.2-python3.14.3-ubuntu-24.04-pro`.
 - Each product image comes in a Standard (`-std`) and a Minimal (`-min`) variant instead of a single image. See [Image variants](#image-variants).
 - Quarto is on the `PATH` at `/usr/local/bin/quarto` rather than under a version-scoped path such as `/opt/quarto/1.8.25/bin/quarto`.
