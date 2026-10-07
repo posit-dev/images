@@ -4,6 +4,8 @@
 
 Meta repository for Posit container images. Contains documentation, design principles, and links across all image repos. No `bakery.yaml`; no buildable images.
 
+When contributing to Bakery-based image repositories, follow the [Bakery skill](https://github.com/posit-dev/images-shared/blob/main/plugins/bakery/skills/bakery/SKILL.md) for image, template, and CI invariants.
+
 ## Sibling Repositories
 
 This project is part of a multi-repo ecosystem for Posit container images. **Read the
